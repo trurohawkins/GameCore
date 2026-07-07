@@ -52,11 +52,6 @@ $(MOLTNLIB)libMoltnCore.a:
 $(OIBLIB)libOIB.a:
 	$(MAKE) -C $(OIBDIR)
 
-GameCore.h: OIB.h 
-	@echo "Generating core game header"
-	@echo "#pragma once" > GameCore.h
-	@cat OIB.h actor.h actorList.h inputMap.h player.h playerManager.h timeWizard.h game.h >> GameCore.h
-
 # Static lib
 $(LIBDIR)libGameCore.a: game.o timeWizard.o player.o inputMap.o actor.o | $(LIBDIR)
 	ar rs $@ $^
