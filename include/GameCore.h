@@ -1,0 +1,9 @@
+#pragma once
+#include "OIB.h"
+#include "actor.h"
+#include "actorList.h"
+#include "inputMap.h"
+#include "player.h"
+#include "playerManager.h"
+#include "timeWizard.h"
+#include "game.h"
