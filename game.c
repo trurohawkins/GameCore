@@ -15,6 +15,7 @@ PollHandler gameTimer = {
 TimeWizard gameWiz;
 int ticksPerSecond = 60;
 bool gameRunning = true;
+bool paused = false;
 
 void (*gameLoop)(float) = 0;
 void (*resizeScreen)(int, int) = 0;
@@ -68,7 +69,7 @@ void gameSimulation() {
 	updateTimeWizard(&gameWiz);
 	//paceFunction(&gameWiz, simulateStep);
 	int steps = consumeTicks(&gameWiz);
-	if (gameLoop) {
+	if (gameLoop && !paused) {
 		for (int i = 0; i < steps; i++) {
 			actorListDo();
 			gameLoop(gameWiz.dt);
@@ -93,6 +94,7 @@ void receiveEvent() {
 			if (ke.key == 27 && ke.val == 1) {
 				exitGame();
 			} else {
+				// sends input to player manager
 				makeKeyInput(ke.key, ke.val);
 			}
 		} else if (se.type == 1) {
@@ -108,3 +110,16 @@ void receiveEvent() {
 		}
 	}
 }
+
+void toggleGamePause() {
+	paused = !paused;
+}
+
+void setGamePause(bool state) {
+	paused = state;
+}
+
+bool getPaused() {
+	return paused;
+}
+

@@ -15,4 +15,7 @@ void gameSimulation();
 void simulateStep(float delta);
 void receiveEvent();
 
+void toggleGamePause();
+void setGamePause(bool state);
+bool getPaused();
 #endif
