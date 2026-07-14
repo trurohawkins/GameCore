@@ -6,6 +6,7 @@
 
 extern void (*gameLoop)(float);
 extern void (*resizeScreen)(int, int);
+extern void (*pauseFunc)(bool);
 
 bool initGame();
 void *runGame(void *data);

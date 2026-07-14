@@ -19,6 +19,7 @@ bool paused = false;
 
 void (*gameLoop)(float) = 0;
 void (*resizeScreen)(int, int) = 0;
+void (*pauseFunc)(bool) = 0;
 
 bool initGame() {
 	initPollSystem(&gamePoll, &receiveEvent);
@@ -106,12 +107,16 @@ void receiveEvent() {
 	}
 }
 
+
 void toggleGamePause() {
-	paused = !paused;
+	setGamePause(!paused);
 }
 
 void setGamePause(bool state) {
 	paused = state;
+	if (pauseFunc) {
+		pauseFunc(paused);
+	}
 }
 
 bool getPaused() {
