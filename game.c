@@ -52,9 +52,6 @@ void closeGame() {
 		close (gameTimer.fd);
 	}
 	closePoll(gamePoll);
-	if (frames[0].content != 0) {
-		freeRenderFrames();
-	}
 	freePlayerManager();
 	deleteActorList();
 }
@@ -100,10 +97,8 @@ void receiveEvent() {
 		} else if (se.type == 1) {
 			int data[2];
 			memcpy(&data, se.data, se.size);
-			if (frames[0].content != 0) {
-				freeRenderFrames();
-			}
-			makeRenderFrames(data[0], data[1]);
+			updateScreenSize(data[0], data[1]);
+			// optinal resize logic can be added
 			if (resizeScreen) {
 				resizeScreen(data[0], data[1]);
 			}
