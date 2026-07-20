@@ -1,3 +1,4 @@
+#define _GNU_SOURCE
 #include "game.h"
 #include "OIB.h"
 
@@ -36,6 +37,7 @@ bool initGame() {
 }
 
 void *runGame(void *data) {
+	pthread_setname_np(pthread_self(), "Game");
 	while (gameRunning) {
 		runPolls(gamePoll.pfd, gamePoll.polls, 16);
 	}
@@ -49,7 +51,7 @@ void exitGame() {
 }
 
 void closeGame() {
-	if (gameTimer.fd = -1) {
+	if (gameTimer.fd != -1) {
 		close (gameTimer.fd);
 	}
 	closePoll(gamePoll);
@@ -67,6 +69,7 @@ void gameSimulation() {
 	updateTimeWizard(&gameWiz);
 	//paceFunction(&gameWiz, simulateStep);
 	int steps = consumeTicks(&gameWiz);
+	char buff[100];
 	if (gameLoop && !paused) {
 		for (int i = 0; i < steps; i++) {
 			actorListDo();
