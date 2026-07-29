@@ -69,7 +69,6 @@ void gameSimulation() {
 	updateTimeWizard(&gameWiz);
 	//paceFunction(&gameWiz, simulateStep);
 	int steps = consumeTicks(&gameWiz);
-	char buff[100];
 	if (gameLoop && !paused) {
 		for (int i = 0; i < steps; i++) {
 			actorListDo();
