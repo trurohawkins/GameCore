@@ -1,14 +1,14 @@
 #include "menu.h"
 
-Graph *makeMenu(int columns, int rows, int spacing) {
+Graph *makeMenu(int columns, int rows, int spacingX, int spacingY) {
 	Graph *menu = calloc(columns * rows, sizeof(Graph));
 	for (int x = 0; x < columns; x++) {
 		for (int y = 0; y < rows; y++) {
 			Graph *cur = &menu[(y * columns) + x];
 			Button *butt = calloc(1, sizeof(Button));
-			butt->textBox = createTextBox(8, 5, "poop");
-			butt->pos[0] = x * spacing;
-			butt->pos[1] = y * spacing;
+			butt->textBox = createTextBox(12, 5, "poop");
+			butt->pos[0] = x * spacingX;
+			butt->pos[1] = y * spacingY;
 			cur->data = butt;
 			cur->neighbors = calloc(4, sizeof(Graph*));
 			cur->maxNeighbors = 4;
@@ -21,11 +21,13 @@ Graph *makeMenu(int columns, int rows, int spacing) {
 			}
 		}
 	}
+	Button *butt = menu->data;
+	butt->selected = true;
 	return menu;
 }
 
 void addMenu(Graph *g, int xp, int yp) {
-	searchMenu(g, xp, yp, g->lastVisit + 1);
+	drawMenu(g, xp, yp, g->lastVisit + 1);
 }
 
 void deleteMenu(Graph *g) {
@@ -33,7 +35,7 @@ void deleteMenu(Graph *g) {
 	free(g);
 }
 
-void searchMenu(Graph *g, int xp, int yp, int visit) {
+void drawMenu(Graph *g, int xp, int yp, int visit) {
 	if (!g || g->lastVisit == visit) {
 		return;
 	}
@@ -44,7 +46,17 @@ void searchMenu(Graph *g, int xp, int yp, int visit) {
 		.type = 1,
 		.index = butt->textBox,
 		.layer = 10,
+		.cmd = 1,
 	};
+	if (butt->selected) {
+		uint8_t color[3] = {255, 255, 0};
+		memcpy(reco.data, color, sizeof(uint8_t) * 3);
+	} else {
+		uint8_t color[3] = {255, 255, 255};
+		memcpy(reco.data, color, sizeof(uint8_t) * 3);
+	}
+	addRenderCommand(reco);
+	reco.cmd = 0;
 	Pos pos = {
 		.x = xp + butt->pos[0],
 		.y = yp + butt->pos[1],
@@ -52,7 +64,7 @@ void searchMenu(Graph *g, int xp, int yp, int visit) {
 	memcpy(reco.data, &pos, sizeof(Pos));
 	addRenderCommand(reco);
 	for (int i = 0; i < g->maxNeighbors; i++) {
-		searchMenu(g->neighbors[i], xp, yp, visit);
+		drawMenu(g->neighbors[i], xp, yp, visit);
 	}
 }
 

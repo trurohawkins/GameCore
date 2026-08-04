@@ -19,9 +19,9 @@ int main() {
 		 outputThread = createThread(outputLoop, NULL, false);
 	}
 	
-	Graph *menu = makeMenu(2, 2, 10);
+	Graph *menu = makeMenu(2, 2, 20, 10);
 	startRendering();
-	addMenu(menu, 30, 30);
+	addMenu(menu, 30, 20);
 	sendRenderFrame();
 	
 	coreLoop();
