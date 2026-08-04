@@ -1,7 +1,12 @@
-TARGET = GameCore
+TARGET = game
 
 LIBDIR = lib/
 INCDIR = include/
+
+RENDERER = TUI
+RENDERDIR = ../$(RENDERER)/
+RENDERLIB = $(RENDERDIR)lib/
+RENDERINC = $(RENDERDIR)include/
 
 HELPERDIR = ../HelperFuncs/
 HELPERINC = $(HELPERDIR)include/
@@ -24,7 +29,7 @@ TSAN_LDFLAGS = -fsanitize=thread
 PROD_CFLAGS = -O2
 PROD_LDFLAGS =
 
-CFLAGS = -MMD -MP -I$(HELPERINC) -I$(MOLTNINC) -I$(OIBINC) -I$(INCDIR)
+CFLAGS = -MMD -MP -I$(HELPERINC) -I$(MOLTNINC) -I$(OIBINC) -I$(RENDERINC) -I$(INCDIR)
 LDFLAGS =
 
 dev: CFLAGS += $(DEV_CFLAGS)
@@ -40,8 +45,11 @@ prod: LDFLAGS += $(PROD_LDFLAGS)
 prod: $(TARGET)
 
 # Linking
-$(TARGET): $(INCDIR)GameCore.h $(LIBDIR)libGameCore.a $(OIBINC)OIB.h $(OIBLIB)libOIB.a $(MOLTNLIB)libMoltnCore.a $(MOLTNINC)MoltnCore.h $(HELPERLIB)libHelper.a  $(HELPERINC)helper.h main.o  
-	gcc main.o -o $@ $(LDFLAGS) $(LIBDIR)libGameCore.a -L$(OIBLIB) -lOIB -L$(MOLTNLIB) -lMoltnCore -L$(HELPERLIB) -lHelper -lm
+$(TARGET): $(RENDERLIB)lib$(RENDERER).a $(RENDERINC)$(RENDERER).h $(INCDIR)GameCore.h $(LIBDIR)libGameCore.a $(OIBINC)OIB.h $(OIBLIB)libOIB.a $(MOLTNLIB)libMoltnCore.a $(MOLTNINC)MoltnCore.h $(HELPERLIB)libHelper.a  $(HELPERINC)helper.h main.o  
+	gcc main.o -o $@ $(LDFLAGS) $(LIBDIR)libGameCore.a -L$(RENDERLIB) -l$(RENDERER) -L$(OIBLIB) -lOIB -L$(MOLTNLIB) -lMoltnCore -L$(HELPERLIB) -lHelper -lm
+
+$(RENDERLIB)lib$(RENDERER).a:
+	$(MAKE) -C $(RENDERDIR)
 
 $(HELPERLIB)libHelper.a:
 	$(MAKE) -C $(HELPERDIR)
@@ -53,7 +61,7 @@ $(OIBLIB)libOIB.a:
 	$(MAKE) -C $(OIBDIR)
 
 # Static lib
-$(LIBDIR)libGameCore.a: game.o timeWizard.o player.o inputMap.o actor.o | $(LIBDIR)
+$(LIBDIR)libGameCore.a: game.o timeWizard.o player.o inputMap.o actor.o menu.o | $(LIBDIR)
 	ar rs $@ $^
 
 # Compiling
@@ -75,6 +83,9 @@ inputMap.o: inputMap.c $(INCDIR)inputMap.h
 
 actor.o: actor.c $(INCDIR)actor.h actorList.c $(INCDIR)actorList.h
 	gcc $(CFLAGS) -c actor.c -o $@
+
+menu.o: menu.c $(INCDIR)menu.h
+	gcc $(CFLAGS) -c menu.c -o $@
 
 $(LIBDIR):
 	mkdir -p $(LIBDIR)

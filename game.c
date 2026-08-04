@@ -8,6 +8,7 @@
 #include "playerManager.h"
 #include "actor.h"
 #include "actorList.h"
+#include "menu.h"
 
 PollHandler gameTimer = {
 	.fd = -1
