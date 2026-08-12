@@ -25,6 +25,12 @@ void pressRight(void *menu, float val) {
 }
 
 
+void pressAccept(void *menu, float val) {
+	if (val == 1) {
+		pressButton(menu);
+	}
+}
+
 void loop(float delta) {
 	if (renderMenu != 0) {
 		startRendering();

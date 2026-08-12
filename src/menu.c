@@ -7,6 +7,9 @@ Menu *makeMenu(int columns, int rows, int spacingX, int spacingY) {
 			Graph *cur = &butts[(y * columns) + x];
 			Button *butt = calloc(1, sizeof(Button));
 			butt->textBox = createTextBox(12, 5, "poop");
+			char buff[100];
+			sprintf(buff, "textbox created %i\n", butt->textBox);
+			debugWrite(buff);
 			butt->pos[0] = x * spacingX;
 			butt->pos[1] = y * spacingY;
 			cur->data = butt;
@@ -44,6 +47,40 @@ void menuMoveCursor(Menu *m, int dir) {
 			butt->selected = true;
 		}
 	}
+}
+
+void pressButton(Menu *m) {
+	Button *butt = m->selected->data;
+	if (butt->func) {
+		butt->func();
+	}
+}
+
+Button *getButton(Menu *m, int xp, int yp) {
+	Graph *cur = m->butts;
+	if (xp != 0) {
+		int xd = 3;
+		if (xp < 0) {
+			xd = 1;
+		}
+		for (int i = 0; i < abs(xp); i++) {
+			if (cur->neighbors[xd]) {
+				cur = cur->neighbors[xd];
+			}
+		}
+	}
+	if (yp != 0) {
+		int yd = 0;
+		if (yp < 0) {
+			yd = 2;
+		}
+		for (int i = 0; i < abs(yp); i++) {
+			if (cur->neighbors[yd]) {
+				cur = cur->neighbors[yd];
+			}
+		}
+	}
+	return cur->data;
 }
 
 void addMenu(Menu *m, int xp, int yp) {

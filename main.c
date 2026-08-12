@@ -22,6 +22,10 @@ int main() {
 	}
 	
 	Menu *menu = makeMenu(2, 3, 20, 10);
+	Button *butt = getButton(menu, 1, 1);
+	TextBox *tBox = getTextBox(butt->textBox);
+	memcpy(tBox->string, "fish", 5);
+	butt->func = &exitGame;
 	Player *god = makePlayer(menu, 0, 0);
 	renderMenu = menu;
 	addPlayer(god);
@@ -29,6 +33,7 @@ int main() {
 	addControl(god, "K0A", pressLeft);
 	addControl(god, "K0S", pressDown);
 	addControl(god, "K0D", pressRight);
+	addControl(god, "K0 ", pressAccept);
 	coreLoop();
 
 

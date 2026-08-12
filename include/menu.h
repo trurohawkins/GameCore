@@ -7,6 +7,8 @@ typedef struct {
 	int textBox;
 	int pos[2];
 
+	void (*func)(void);
+
 	bool selected;
 } Button;
 
@@ -18,9 +20,11 @@ typedef struct {
 Menu *makeMenu(int columns, int rows, int spacingX, int spacingY);
 
 void menuMoveCursor(Menu *m, int dir);
+void pressButton(Menu *m);
+Button *getButton(Menu *m, int xp, int yp);
 
 void addMenu(Menu *m, int xp, int yp);
 void deleteMenu(Menu *m);
-void drawGraph(Graph *g, int xp, int yp,int visit);
+void drawGraph(Graph *g, int xp, int yp, int visit);
 void freeGraph(Graph *g, int visit);
 
