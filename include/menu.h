@@ -10,9 +10,17 @@ typedef struct {
 	bool selected;
 } Button;
 
-Graph *makeMenu(int columns, int rows, int spacingX, int spacingY);
-void addMenu(Graph *g, int xp, int yp);
-void deleteMenu(Graph *g);
-void drawMenu(Graph *g, int xp, int yp,int visit);
-void freeMenu(Graph *g, int visit);
+typedef struct {
+	Graph *butts;
+	Graph *selected;
+} Menu;
+
+Menu *makeMenu(int columns, int rows, int spacingX, int spacingY);
+
+void menuMoveCursor(Menu *m, int dir);
+
+void addMenu(Menu *m, int xp, int yp);
+void deleteMenu(Menu *m);
+void drawGraph(Graph *g, int xp, int yp,int visit);
+void freeGraph(Graph *g, int visit);
 

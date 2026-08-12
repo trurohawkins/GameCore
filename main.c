@@ -3,6 +3,8 @@
 
 bool runGraphics = true;
 
+#include "menuControls.c"
+
 int main() {
 	srand(time(NULL));
 	initDirections();
@@ -12,18 +14,21 @@ int main() {
 	if (runGraphics) {
 		initScreen();
 	}
-
+	gameLoop = &loop;
 	pthread_t gameThread = createThread(runGame, NULL, false);
 	pthread_t outputThread = 0;
 	if (runGraphics > 0) {
 		 outputThread = createThread(outputLoop, NULL, false);
 	}
 	
-	Graph *menu = makeMenu(2, 2, 20, 10);
-	startRendering();
-	addMenu(menu, 30, 20);
-	sendRenderFrame();
-	
+	Menu *menu = makeMenu(2, 3, 20, 10);
+	Player *god = makePlayer(menu, 0, 0);
+	renderMenu = menu;
+	addPlayer(god);
+	addControl(god, "K0W", pressUp);
+	addControl(god, "K0A", pressLeft);
+	addControl(god, "K0S", pressDown);
+	addControl(god, "K0D", pressRight);
 	coreLoop();
 
 

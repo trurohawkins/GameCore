@@ -2,6 +2,7 @@ TARGET = game
 
 LIBDIR = lib/
 INCDIR = include/
+SRCDIR = src/
 
 RENDERER = TUI
 RENDERDIR = ../$(RENDERER)/
@@ -29,7 +30,7 @@ TSAN_LDFLAGS = -fsanitize=thread
 PROD_CFLAGS = -O2
 PROD_LDFLAGS =
 
-CFLAGS = -MMD -MP -I$(HELPERINC) -I$(MOLTNINC) -I$(OIBINC) -I$(RENDERINC) -I$(INCDIR)
+CFLAGS = -MMD -MP -I$(HELPERINC) -I$(MOLTNINC) -I$(OIBINC) -I$(RENDERINC) -I$(INCDIR) -I$(SRCDIR)
 LDFLAGS =
 
 dev: CFLAGS += $(DEV_CFLAGS)
@@ -65,27 +66,27 @@ $(LIBDIR)libGameCore.a: game.o timeWizard.o player.o inputMap.o actor.o menu.o |
 	ar rs $@ $^
 
 # Compiling
-main.o: main.c
+main.o: main.c menuControls.c
 	gcc $(CFLAGS) -c main.c -o $@
 
 #GAME
-game.o: game.c $(INCDIR)game.h
-	gcc $(CFLAGS) -c game.c -o $@
+game.o: $(SRCDIR)game.c $(INCDIR)game.h
+	gcc $(CFLAGS) -c $< -o $@
 
-timeWizard.o: timeWizard.c $(INCDIR)timeWizard.h
-	gcc $(CFLAGS) -c timeWizard.c -o $@
+timeWizard.o: $(SRCDIR)timeWizard.c $(INCDIR)timeWizard.h
+	gcc $(CFLAGS) -c $< -o $@
 
-player.o: player.c $(INCDIR)player.h playerManager.c $(INCDIR)playerManager.h
-	gcc $(CFLAGS) -c player.c -o $@
+player.o: $(SRCDIR)player.c $(INCDIR)player.h $(SRCDIR)playerManager.c $(INCDIR)playerManager.h
+	gcc $(CFLAGS) -c $< -o $@
 
-inputMap.o: inputMap.c $(INCDIR)inputMap.h
-	gcc $(CFLAGS) -c inputMap.c -o $@
+inputMap.o: $(SRCDIR)inputMap.c $(INCDIR)inputMap.h
+	gcc $(CFLAGS) -c $< -o $@
 
-actor.o: actor.c $(INCDIR)actor.h actorList.c $(INCDIR)actorList.h
-	gcc $(CFLAGS) -c actor.c -o $@
+actor.o: $(SRCDIR)actor.c $(INCDIR)actor.h $(SRCDIR)actorList.c $(INCDIR)actorList.h
+	gcc $(CFLAGS) -c $< -o $@
 
-menu.o: menu.c $(INCDIR)menu.h
-	gcc $(CFLAGS) -c menu.c -o $@
+menu.o: $(SRCDIR)menu.c $(INCDIR)menu.h
+	gcc $(CFLAGS) -c $< -o $@
 
 $(LIBDIR):
 	mkdir -p $(LIBDIR)
