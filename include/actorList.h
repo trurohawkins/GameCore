@@ -1,10 +1,10 @@
 #ifndef ACTORLIST
 #define ACTORLIST
 
-void makeActorList();
-void addActor(Actor *);
-void removeActor(Actor *);
-void deleteActorList();
+bool initActorLists(int num);
+void addActor(Actor *a);
+void removeActor(Actor *a);
+void deleteActorLists();
 void actorListDo();
 
 #endif

@@ -18,6 +18,7 @@ TimeWizard gameWiz;
 int ticksPerSecond = 60;
 bool gameRunning = true;
 bool paused = false;
+int actorLists = 2;
 
 void (*gameLoop)(float) = 0;
 void (*resizeScreen)(int, int) = 0;
@@ -31,7 +32,7 @@ bool initGame() {
 
 	initTimeWizard(&gameWiz, ticksPerSecond);
 
-	makeActorList();
+	initActorLists(actorLists);
 	makePlayerManager();
 
 	return true;
@@ -57,18 +58,18 @@ void closeGame() {
 	}
 	closePoll(gamePoll);
 	freePlayerManager();
-	deleteActorList();
+	deleteActorLists();
 }
 
 void gameSimulation() {
-	uint64_t expirations;
-	// used for draining
-	if (read(gameTimer.fd, &expirations, sizeof(expirations)) == -1) {
+	// used for draining fd
+	uint64_t drain;
+	if (read(gameTimer.fd, &drain, sizeof(drain)) == -1) {
 		perror("readding timer fd for simulations");
 		return;
 	}
 	updateTimeWizard(&gameWiz);
-	//paceFunction(&gameWiz, simulateStep);
+
 	int steps = consumeTicks(&gameWiz);
 	if (gameLoop && !paused) {
 		for (int i = 0; i < steps; i++) {

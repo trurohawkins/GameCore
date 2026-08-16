@@ -1,25 +1,37 @@
-linkedList *ActorList = 0;
+linkedList **ActorLists = 0;
+int listsLength = 0;;
+int curList = 0;
 
-void makeActorList() {
-	ActorList = makeList();
+bool initActorLists(int num) {
+	if (!ActorLists) {
+		ActorLists = calloc(num, sizeof(linkedList*));
+		for (int i = 0; i < num; i++) {
+			ActorLists[i] = makeList();
+		}
+		listsLength = num;
+		return true;
+	} else {
+		return false;
+	}
 }
 
 void addActor(Actor *a) {
-	addToList(&ActorList, a);
+	addToList(&ActorLists[curList], a);
 }
 
 void removeActor(Actor *a) {
-	removeFromList(&ActorList, a);
+	removeFromList(&ActorLists[curList], a);
 }
 
-void deleteActorList() {
-	deleteList(&ActorList, deleteActor);
+void deleteActorLists() {
+	for (int i = 0; i < listsLength; i++) {
+		deleteList(&ActorLists[i], deleteActor);
+	}
 }
 
 void actorListDo() {
-	linkedList *cur = ActorList;
+	linkedList *cur = ActorLists[curList];
 	linkedList *pre = cur;
-	int count = 0;
 	while (cur) {
 		if (cur->data) {
 			Actor *a = cur->data;
@@ -28,24 +40,15 @@ void actorListDo() {
 				deleteActor(a);
 				cur->data = 0;
 				if (pre == cur) {
-					ActorList = cur->next;
+					ActorLists[curList] = cur->next;
 				} else {
 					pre->next = cur->next;
 				}
 				cur = cur->next;
 				free(tmp);
-				if (cur == 0 && count == 0) {
-					free(ActorList);
-					ActorList = 0;
-					break;
-				}
-				count++;
-				continue;
-			}
-			if (a->active) {
+			} else if (a->active) {
 				doActions(a);
 			}
-			count++;
 		}
 		pre = cur;
 		cur = cur->next;
