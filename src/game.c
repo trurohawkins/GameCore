@@ -18,9 +18,12 @@ TimeWizard gameWiz;
 int ticksPerSecond = 60;
 bool gameRunning = true;
 bool paused = false;
+bool renderNewShot = true;
+bool quickExit = true;
 int actorLists = 2;
 
 void (*gameLoop)(float) = 0;
+void (*renderFunc)(void) = 0;
 void (*resizeScreen)(int, int) = 0;
 void (*pauseFunc)(bool) = 0;
 
@@ -71,10 +74,18 @@ void gameSimulation() {
 	updateTimeWizard(&gameWiz);
 
 	int steps = consumeTicks(&gameWiz);
-	if (gameLoop && !paused) {
+	if (!paused) {
 		for (int i = 0; i < steps; i++) {
-			actorListDo();
-			gameLoop(gameWiz.dt);
+			actorListDo(gameWiz.dt);
+			if (gameLoop) {
+				gameLoop(gameWiz.dt);
+			}
+		}
+		if (renderFunc && renderNewShot) {
+			startRendering();
+			renderFunc();
+			sendRenderFrame();
+			renderNewShot = false;
 		}
 	}
 }
@@ -93,7 +104,7 @@ void receiveEvent() {
 		if (se.type == STDIN_FILENO) {
 			KeyEvent ke;
 			memcpy(&ke, se.data, se.size);
-			if (ke.key == 27 && ke.val == 1) {
+			if (ke.key == 27 && ke.val == 1 && quickExit) {
 				exitGame();
 			} else {
 				// sends input to player manager
@@ -106,6 +117,7 @@ void receiveEvent() {
 			// optinal resize logic can be added
 			if (resizeScreen) {
 				resizeScreen(data[0], data[1]);
+				renderNewShot = true;
 			}
 		}
 	}

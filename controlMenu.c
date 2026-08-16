@@ -31,10 +31,8 @@ void pressAccept(void *menu, float val) {
 	}
 }
 
-void loop(float delta) {
+void renderButts() {
 	if (renderMenu != 0) {
-		startRendering();
-		addMenu(renderMenu, 30, 15);
-		sendRenderFrame();
+		addMenu(renderMenu);
 	}
 }

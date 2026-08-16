@@ -1,7 +1,7 @@
 #include "OIB.h"
 #include "actor.h"
 
-Action *makeAction(int type, int (*func)(void*, Action*), void *data) {
+Action *makeAction(int type, int (*func)(void*, Action*, float), void *data) {
 	Action *a = calloc(1, sizeof(Action));
 	a->type = type;
 	a->active = 1;
@@ -35,12 +35,12 @@ Action *findAction(Actor *actor, int type) {
 	return 0;
 }
 
-void doActions(Actor *actor) {
+void doActions(Actor *actor, float delta){
 	linkedList *aList = actor->actionList;
 	while (aList != 0) {
 		Action *action = aList->data;
 		if (action->active) {
-			action->func(actor->body, action);
+			action->func(actor->body, action, delta);
 		}
 		aList = aList->next;
 	}

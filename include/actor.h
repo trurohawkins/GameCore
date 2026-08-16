@@ -7,7 +7,7 @@ typedef struct Action {
 	bool active;
 	int type;
 	void *data;
-	int (*func)(void *data, struct Action*);
+	int (*func)(void *data, struct Action*, float delta);
 } Action;
 
 typedef struct Actor {
@@ -17,10 +17,10 @@ typedef struct Actor {
 	bool deleteMe;
 } Actor;
 
-Action *makeAction(int type, int (*func)(void*, Action*), void *data);
+Action *makeAction(int type, int (*func)(void*, Action*, float), void *data);
 Actor *makeActor(void *body);
 void addAction(Actor *actor, Action *action);
-void doActions(Actor *actor);
+void doActions(Actor *actor, float delta);
 Action *findAction(Actor *actor, int type);
 void deleteActor(void *a);
 void freeActionList(Actor *actor);

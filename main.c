@@ -3,7 +3,7 @@
 
 bool runGraphics = true;
 
-#include "menuControls.c"
+#include "controlMenu.c"
 
 int main() {
 	srand(time(NULL));
@@ -14,7 +14,7 @@ int main() {
 	if (runGraphics) {
 		initScreen();
 	}
-	gameLoop = &loop;
+	renderFunc = renderButts;
 	pthread_t gameThread = createThread(runGame, NULL, false);
 	pthread_t outputThread = 0;
 	if (runGraphics > 0) {
@@ -22,6 +22,8 @@ int main() {
 	}
 	
 	Menu *menu = makeMenu(2, 3, 20, 10);
+	menu->pos[0] = 0.5f;
+	menu->pos[1] = 0.5f;
 	Button *butt = getButton(menu, 1, 1);
 	TextBox *tBox = getTextBox(butt->textBox);
 	memcpy(tBox->string, "fish", 5);

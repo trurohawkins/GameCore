@@ -29,7 +29,7 @@ void deleteActorLists() {
 	}
 }
 
-void actorListDo() {
+void actorListDo(float delta) {
 	linkedList *cur = ActorLists[curList];
 	linkedList *pre = cur;
 	while (cur) {
@@ -47,7 +47,7 @@ void actorListDo() {
 				cur = cur->next;
 				free(tmp);
 			} else if (a->active) {
-				doActions(a);
+				doActions(a, delta);
 			}
 		}
 		pre = cur;

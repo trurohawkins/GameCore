@@ -66,7 +66,7 @@ $(LIBDIR)libGameCore.a: game.o timeWizard.o player.o inputMap.o actor.o menu.o |
 	ar rs $@ $^
 
 # Compiling
-main.o: main.c menuControls.c
+main.o: main.c controlMenu.c
 	gcc $(CFLAGS) -c main.c -o $@
 
 #GAME

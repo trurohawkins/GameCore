@@ -7,22 +7,17 @@ Menu *makeMenu(int columns, int rows, int spacingX, int spacingY) {
 			Graph *cur = &butts[(y * columns) + x];
 			Button *butt = calloc(1, sizeof(Button));
 			butt->textBox = createTextBox(12, 5, "poop");
-			char buff[100];
-			sprintf(buff, "textbox created %i\n", butt->textBox);
-			debugWrite(buff);
 			butt->pos[0] = x * spacingX;
 			butt->pos[1] = y * spacingY;
 			cur->data = butt;
 			cur->neighbors = calloc(4, sizeof(Graph*));
 			cur->maxNeighbors = 4;
-			printf("graph %i, %i\n", x, y);
 			for (int i = 0; i < 4; i++) {
 				int *d = getDir4(i);
 				int xp = ((x + d[0]) % columns + columns) % columns;
 				int yp = ((y + d[1] % rows + rows) % rows);
 				//int pos[2] = {(x + d[0]) % columns, (y + d[1]) % rows};
 				if (xp >= 0 && yp >= 0 && xp < columns && yp < rows) {
-					printf("	neighbor: %i - %i, %i\n", i, xp, yp);
 					cur->neighbors[i] = &butts[(yp * columns) + xp];
 				}
 			}
@@ -45,6 +40,7 @@ void menuMoveCursor(Menu *m, int dir) {
 			m->selected = neighbor;
 			butt = neighbor->data;
 			butt->selected = true;
+			renderNewShot = true;
 		}
 	}
 }
@@ -57,6 +53,22 @@ void pressButton(Menu *m) {
 }
 
 Button *getButton(Menu *m, int xp, int yp) {
+	Graph *cur = getGraph(m, xp, yp);
+	return cur->data;
+}
+
+void selectButton(Menu *m, int xp, int yp) {
+	Graph *new = getGraph(m, xp, yp);
+	if (new) {
+		Button *old = m->selected->data;
+		old->selected = false;
+		m->selected = new;
+		((Button*)new->data)->selected = true;
+	}
+
+}
+
+Graph *getGraph(Menu *m, int xp, int yp) {
 	Graph *cur = m->butts;
 	if (xp != 0) {
 		int xd = 3;
@@ -80,11 +92,16 @@ Button *getButton(Menu *m, int xp, int yp) {
 			}
 		}
 	}
-	return cur->data;
+	return cur;
 }
 
-void addMenu(Menu *m, int xp, int yp) {
-	drawGraph(m->butts, xp, yp, m->butts->lastVisit + 1);
+void nameButton(Button *butt, char *name) {
+	TextBox *tBox = getTextBox(butt->textBox);
+	memcpy(tBox->string, name, strlen(name));
+}
+
+void addMenu(Menu *m) {
+	drawGraph(m->butts, m->pos[0] * screenX, m->pos[1] * screenY, m->butts->lastVisit + 1);
 }
 
 void deleteMenu(Menu *m) {

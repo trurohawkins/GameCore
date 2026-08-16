@@ -4,7 +4,10 @@
 #include <stdint.h>
 #include <ctype.h>
 
+extern bool renderNewShot;
+extern bool quickExit;
 extern void (*gameLoop)(float);
+extern void (*renderFunc)(void);
 extern void (*resizeScreen)(int, int);
 extern void (*pauseFunc)(bool);
 
