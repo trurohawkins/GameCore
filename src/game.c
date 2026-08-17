@@ -81,12 +81,12 @@ void gameSimulation() {
 				gameLoop(gameWiz.dt);
 			}
 		}
-		if (renderFunc && renderNewShot) {
-			startRendering();
-			renderFunc();
-			sendRenderFrame();
-			renderNewShot = false;
-		}
+	}
+	if (renderFunc && renderNewShot) {
+		startRendering();
+		renderFunc();
+		sendRenderFrame();
+		renderNewShot = false;
 	}
 }
 
