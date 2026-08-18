@@ -41,6 +41,8 @@ void actorListDo(float delta) {
 				cur->data = 0;
 				if (pre == cur) {
 					ActorLists[curList] = cur->next;
+					free(tmp);
+					break;
 				} else {
 					pre->next = cur->next;
 				}
