@@ -53,7 +53,9 @@ void actorListDo(float delta) {
 			}
 		}
 		pre = cur;
-		cur = cur->next;
+		if (cur) {
+			cur = cur->next;
+		}
 	}
 }
 
