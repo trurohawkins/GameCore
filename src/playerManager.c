@@ -83,10 +83,14 @@ void processInput(inpReceived ir) {
 				while (con != NULL) {
 					InpMap *tmp = (InpMap*)con->data;
 					char *c = tmp->input;
-					if (strCompare(inp, c) == true) {
-						tmp->func(p->self, ir.val);
-						break;
-					} 
+					if (c) {
+						if (strCompare(inp, c) == true) {
+							tmp->func(p->self, ir.val);
+							break;
+						} 
+					} else {
+						debugWrite("no input on this player\n");
+					}
 					con = con->next;
 				}
 			}
