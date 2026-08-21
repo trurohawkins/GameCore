@@ -4,7 +4,6 @@
 #include <stdint.h>
 #include <ctype.h>
 
-extern bool renderNewShot;
 extern bool quickExit;
 extern void (*gameLoop)(float);
 extern void (*renderFunc)(void);
@@ -18,6 +17,8 @@ void closeGame();
 void gameSimulation();
 void simulateStep(float delta);
 void receiveEvent();
+
+void setNewRender();
 
 void toggleGamePause();
 void setGamePause(bool state);

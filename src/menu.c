@@ -40,7 +40,7 @@ void menuMoveCursor(Menu *m, int dir) {
 			m->selected = neighbor;
 			butt = neighbor->data;
 			butt->selected = true;
-			renderNewShot = true;
+			setNewRender();
 		}
 	}
 }

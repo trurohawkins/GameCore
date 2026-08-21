@@ -64,6 +64,10 @@ void closeGame() {
 	deleteActorLists();
 }
 
+void setNewRender() {
+	renderNewShot = true;
+}
+
 void gameSimulation() {
 	// used for draining fd
 	uint64_t drain;
