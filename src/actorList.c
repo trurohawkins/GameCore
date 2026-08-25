@@ -26,6 +26,7 @@ void removeActor(Actor *a) {
 void deleteActorLists() {
 	for (int i = 0; i < listsLength; i++) {
 		deleteList(&ActorLists[i], deleteActor);
+		ActorLists[i] = 0;
 	}
 }
 
