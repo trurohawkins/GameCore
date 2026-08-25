@@ -51,8 +51,7 @@ void *runGame(void *data) {
 
 void exitGame() {
 	gameRunning = false;
-	atomic_store_explicit(&running, false, memory_order_release);
-	wakeEvent();
+	exitCoreLoop();
 }
 
 void closeGame() {
