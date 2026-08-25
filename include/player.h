@@ -14,6 +14,7 @@ typedef struct Player {
 
 Player *makePlayer(void *character, int num, void (*deleteFunc)(void*));
 void addControl(Player *player, char *inp, void (*n_func)(void*,float));
+void addKeyControl(Player *player, KeyCode code, void (*n_func)(void*, float));
 bool cmpPlayer(void *p1, void *p2);
 void freePlayer(Player *p);
 

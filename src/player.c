@@ -21,6 +21,11 @@ void addControl(Player *player, char *inp, void (*n_func)(void*,float)) {
 	addToList(&(player->controls),im);
 }
 
+void addKeyControl(Player *player, KeyCode code, void (*n_func)(void*, float)) {
+	char buff[4] = {'K', 48, code, '\0'};
+	addControl(player, buff, n_func);
+}
+
 void freePlayer(Player *p) {
 	deleteList(&p->controls, freeInp);
 	if (p->delFunc != NULL) {
