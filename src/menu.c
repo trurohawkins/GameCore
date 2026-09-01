@@ -122,6 +122,10 @@ void drawGraph(Graph *g, int xp, int yp, int visit) {
 		.index = butt->textBox,
 		.layer = 10,
 		.cmd = 1,
+		.pos = {
+			.x = xp + butt->pos[0],
+			.y = screenY - (yp + butt->pos[1]),
+		}
 	};
 	if (butt->selected) {
 		uint8_t color[3] = {255, 255, 0};
@@ -132,11 +136,7 @@ void drawGraph(Graph *g, int xp, int yp, int visit) {
 	}
 	addRenderCommand(reco);
 	reco.cmd = 0;
-	Pos pos = {
-		.x = xp + butt->pos[0],
-		.y = screenY - (yp + butt->pos[1]),
-	};
-	memcpy(reco.data, &pos, sizeof(Pos));
+	//memcpy(reco.data, &pos, sizeof(Pos));
 	addRenderCommand(reco);
 	for (int i = 0; i < g->maxNeighbors; i++) {
 		drawGraph(g->neighbors[i], xp, yp, visit);
