@@ -1,14 +1,14 @@
 #include "menu.h"
 
-Menu *makeMenu(int columns, int rows, int spacingX, int spacingY) {
+Menu *makeMenu(int columns, int rows, int boxX, int boxY) {
 	Graph *butts = calloc(columns * rows, sizeof(Graph));
 	for (int x = 0; x < columns; x++) {
 		for (int y = 0; y < rows; y++) {
 			Graph *cur = &butts[(y * columns) + x];
 			Button *butt = calloc(1, sizeof(Button));
-			butt->textBox = createTextBox(12, 5, "poop");
-			butt->pos[0] = x * spacingX;
-			butt->pos[1] = y * spacingY;
+			butt->textBox = createTextBox(boxX, boxY, "");
+			butt->pos[0] = x;// * spacingX;
+			butt->pos[1] = y;// * spacingY;
 			cur->data = butt;
 			cur->neighbors = calloc(4, sizeof(Graph*));
 			cur->maxNeighbors = 4;
@@ -26,9 +26,16 @@ Menu *makeMenu(int columns, int rows, int spacingX, int spacingY) {
 	Menu *menu = calloc(1, sizeof(Menu));
 	menu->butts = butts;
 	menu->selected = butts;
+	menu->spacing[0] = boxX + 3;
+	menu->spacing[1] = boxY + 3;
 	Button *b = menu->selected->data;
 	b->selected = true;
 	return menu;
+}
+
+void setMenuSpacing(Menu *m, int spacingX, int spacingY) {
+	m->spacing[0] = spacingX;
+	m->spacing[1] = spacingY;
 }
 
 void menuMoveCursor(Menu *m, int dir) {
@@ -65,7 +72,11 @@ void selectButton(Menu *m, int xp, int yp) {
 		m->selected = new;
 		((Button*)new->data)->selected = true;
 	}
+}
 
+void deselectButton(Menu *m) {
+	Button *old = m->selected->data;
+	old->selected = false;
 }
 
 Graph *getGraph(Menu *m, int xp, int yp) {
@@ -101,7 +112,7 @@ void nameButton(Button *butt, char *name) {
 }
 
 void addMenu(Menu *m) {
-	drawGraph(m->butts, m->pos[0] * screenX, m->pos[1] * screenY, m->butts->lastVisit + 1);
+	drawGraph(m->butts, m, m->pos[0] * screenX, m->pos[1] * screenY, m->butts->lastVisit + 1);
 }
 
 void deleteMenu(Menu *m) {
@@ -110,7 +121,7 @@ void deleteMenu(Menu *m) {
 	free(m);
 }
 
-void drawGraph(Graph *g, int xp, int yp, int visit) {
+void drawGraph(Graph *g, Menu *m, int xp, int yp, int visit) {
 	if (!g || g->lastVisit == visit) {
 		return;
 	}
@@ -123,8 +134,8 @@ void drawGraph(Graph *g, int xp, int yp, int visit) {
 		.layer = 10,
 		.cmd = 1,
 		.pos = {
-			.x = xp + butt->pos[0],
-			.y = yp + butt->pos[1],
+			.x = xp + (butt->pos[0] * m->spacing[0]),
+			.y = yp + (butt->pos[1] * m->spacing[1]),
 		}
 	};
 	if (butt->selected) {
@@ -139,7 +150,7 @@ void drawGraph(Graph *g, int xp, int yp, int visit) {
 	//memcpy(reco.data, &pos, sizeof(Pos));
 	addRenderCommand(reco);
 	for (int i = 0; i < g->maxNeighbors; i++) {
-		drawGraph(g->neighbors[i], xp, yp, visit);
+		drawGraph(g->neighbors[i], m, xp, yp, visit);
 	}
 }
 

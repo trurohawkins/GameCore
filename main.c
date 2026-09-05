@@ -21,7 +21,8 @@ int main() {
 		 outputThread = createThread(outputLoop, NULL, false);
 	}
 	
-	Menu *menu = makeMenu(2, 3, 20, 10);
+	Menu *menu = makeMenu(2, 3, 12, 5);
+	setMenuSpacing(menu, 20, 10);
 	menu->pos[0] = 0.5f;
 	menu->pos[1] = 0.5f;
 	Button *butt = getButton(menu, 1, 1);
