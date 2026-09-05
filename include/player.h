@@ -8,7 +8,7 @@ typedef struct Player {
 	int num;
 	void(*delFunc)(void*);
 	bool active;
-	bool pausePlayer;//should I process controls while game is paused?
+	bool ignorePause;//should I process controls while game is paused?
 } Player;
 
 

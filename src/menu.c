@@ -124,7 +124,7 @@ void drawGraph(Graph *g, int xp, int yp, int visit) {
 		.cmd = 1,
 		.pos = {
 			.x = xp + butt->pos[0],
-			.y = screenY - (yp + butt->pos[1]),
+			.y = yp + butt->pos[1],
 		}
 	};
 	if (butt->selected) {

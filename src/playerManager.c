@@ -1,4 +1,6 @@
 #include "playerManager.h"
+#include "game.h"
+
 PlayerManager *PM;
 
 void makePlayerManager() {
@@ -42,7 +44,7 @@ void processInput(inpReceived ir) {
 	while (curPlayer != NULL) {
 		if(curPlayer->data != NULL) {
 			Player *p = (Player*)(curPlayer->data);
-			if(p->active) { 
+			if(p->active && (!getPaused() || p->ignorePause)) { 
 				linkedList *con = p->controls;
 				while (con != NULL) {
 					InpMap *tmp = (InpMap*)con->data;
