@@ -6,7 +6,6 @@
 
 extern bool quickExit;
 extern void (*gameLoop)(float);
-extern void (*renderFunc)(void);
 extern void (*resizeScreen)(int, int);
 extern void (*pauseFunc)(bool);
 
@@ -17,6 +16,7 @@ void closeGame();
 void gameSimulation();
 void simulateStep(float delta);
 void receiveEvent();
+void addRenderFunction(void (*func)(void));
 
 void setNewRender();
 

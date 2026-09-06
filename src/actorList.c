@@ -1,14 +1,15 @@
-linkedList **ActorLists = 0;
-int listsLength = 0;;
-int curList = 0;
+#include "actorList.h"
+ActorLists *actorLists = 0;
 
 bool initActorLists(int num) {
-	if (!ActorLists) {
-		ActorLists = calloc(num, sizeof(linkedList*));
+	if (!actorLists) {
+		actorLists = calloc(1, sizeof(ActorLists));
+		actorLists->lists = calloc(num, sizeof(linkedList*));
 		for (int i = 0; i < num; i++) {
-			ActorLists[i] = makeList();
+			actorLists->lists[i] = makeList();
 		}
-		listsLength = num;
+		actorLists->numLists = num;
+		actorLists->curList = 0;
 		return true;
 	} else {
 		return false;
@@ -16,23 +17,36 @@ bool initActorLists(int num) {
 }
 
 void addActor(Actor *a) {
-	addToList(&ActorLists[curList], a);
+	addToList(&actorLists->lists[actorLists->curList], a);
 }
 
 void removeActor(Actor *a) {
-	removeFromList(&ActorLists[curList], a);
+	removeFromList(&actorLists->lists[actorLists->curList], a);
 }
 
 void deleteActorLists() {
-	for (int i = 0; i < listsLength; i++) {
-		deleteList(&ActorLists[i], deleteActor);
-		ActorLists[i] = 0;
+	if (actorLists) {
+		if (actorLists->doing) {
+			actorLists->deleteMe = true;
+			return;
+		}
+		for (int i = 0; i < actorLists->numLists; i++) {
+			deleteList(&actorLists->lists[i], deleteActor);
+			actorLists->lists[i] = 0;
+		}
+		free(actorLists->lists);
+		free(actorLists);
+		actorLists = 0;
 	}
 }
 
 void actorListDo(float delta) {
-	linkedList *cur = ActorLists[curList];
+	if (!actorLists) {
+		return;
+	}
+	linkedList *cur = actorLists->lists[actorLists->curList];
 	linkedList *pre = cur;
+	actorLists->doing = true;
 	while (cur) {
 		if (cur->data) {
 			Actor *a = cur->data;
@@ -41,7 +55,7 @@ void actorListDo(float delta) {
 				deleteActor(a);
 				cur->data = 0;
 				if (pre == cur) {
-					ActorLists[curList] = cur->next;
+					actorLists->lists[actorLists->curList] = cur->next;
 					free(tmp);
 					break;
 				} else {
@@ -58,5 +72,10 @@ void actorListDo(float delta) {
 			cur = cur->next;
 		}
 	}
+	actorLists->doing = false;
+	if (actorLists->deleteMe) {
+		deleteActorLists();
+	}
+
 }
 

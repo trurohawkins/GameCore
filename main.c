@@ -14,7 +14,7 @@ int main() {
 	if (runGraphics) {
 		initScreen();
 	}
-	renderFunc = renderButts;
+	addRenderFunction(renderButts);
 	pthread_t gameThread = createThread(runGame, NULL, false);
 	pthread_t outputThread = 0;
 	if (runGraphics > 0) {

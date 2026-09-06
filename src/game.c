@@ -20,10 +20,11 @@ bool gameRunning = true;
 bool paused = false;
 bool renderNewShot = true;
 bool quickExit = true;
-int actorLists = 2;
+int numActorLists = 1;
 
 void (*gameLoop)(float) = 0;
-void (*renderFunc)(void) = 0;
+linkedList *renderFuncs = 0;
+//void (*renderFunc)(void) = 0;
 void (*resizeScreen)(int, int) = 0;
 void (*pauseFunc)(bool) = 0;
 
@@ -35,7 +36,7 @@ bool initGame() {
 
 	initTimeWizard(&gameWiz, ticksPerSecond);
 
-	initActorLists(actorLists);
+	initActorLists(numActorLists);
 	makePlayerManager();
 
 	return true;
@@ -85,12 +86,19 @@ void gameSimulation() {
 			}
 		}
 	}
-	if (renderFunc && renderNewShot) {
+	if (renderFuncs && renderNewShot) {
 		startRendering();
-		renderFunc();
+		for (linkedList *cur = renderFuncs; cur; cur = cur->next) {
+			void (*renderFunc)(void) = cur->data;
+			renderFunc();
+		}
 		sendRenderFrame();
 		renderNewShot = false;
 	}
+}
+
+void addRenderFunction(void (*func)(void)) {
+	addToList(&renderFuncs, func);
 }
 
 void receiveEvent() {
