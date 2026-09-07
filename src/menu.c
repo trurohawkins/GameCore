@@ -108,7 +108,9 @@ Graph *getGraph(Menu *m, int xp, int yp) {
 
 void nameButton(Button *butt, char *name) {
 	TextBox *tBox = getTextBox(butt->textBox);
-	memcpy(tBox->string, name, strlen(name));
+	if (tBox) {
+		memcpy(tBox->string, name, strlen(name));
+	}
 }
 
 void addMenu(Menu *m) {
