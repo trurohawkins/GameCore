@@ -52,7 +52,7 @@ void processInput(inpReceived ir) {
 					if (c) {
 						if (strCompare(inp, c) == true) {
 							tmp->func(p->self, ir.val);
-							break;
+							//break;
 						} 
 					} else {
 						debugWrite("no input on this player\n");
