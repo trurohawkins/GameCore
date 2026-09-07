@@ -6,13 +6,12 @@ typedef struct Player {
 	void *self;
 	linkedList *controls;
 	int num;
-	void(*delFunc)(void*);
 	bool active;
 	bool ignorePause;//should I process controls while game is paused?
 } Player;
 
 
-Player *makePlayer(void *character, int num, void (*deleteFunc)(void*));
+Player *makePlayer(void *character, int num);
 void addControl(Player *player, char *inp, void (*n_func)(void*,float));
 void addKeyControl(Player *player, KeyCode code, void (*n_func)(void*, float));
 bool cmpPlayer(void *p1, void *p2);

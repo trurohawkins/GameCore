@@ -29,9 +29,8 @@ int main() {
 	TextBox *tBox = getTextBox(butt->textBox);
 	memcpy(tBox->string, "fish", 5);
 	butt->func = &exitGame;
-	Player *god = makePlayer(menu, 0, 0);
 	renderMenu = menu;
-	addPlayer(god);
+	Player *god = addPlayer(menu);
 	addControl(god, "K0W", pressUp);
 	addControl(god, "K0A", pressLeft);
 	addControl(god, "K0S", pressDown);

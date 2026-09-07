@@ -4,15 +4,12 @@
 #include "playerManager.h"
 #include "playerManager.c"
 
-Player *makePlayer(void *character, int num, void (*deleteFunc)(void*)) {
+Player *makePlayer(void *character, int num) {
 	Player *p = (Player *)calloc(1, sizeof(Player));
 	p->num = num;
 	p->self = character;
 	p->controls = makeList();
-	p->delFunc = deleteFunc;
 	p->active = true;
-
-	//Player *a = addPlayer(p);
 	return p;
 }
 
@@ -28,9 +25,6 @@ void addKeyControl(Player *player, KeyCode code, void (*n_func)(void*, float)) {
 
 void freePlayer(Player *p) {
 	deleteList(&p->controls, freeInp);
-	if (p->delFunc != NULL) {
-		p->delFunc(p->self);
-	}
 	free(p);
 }
 

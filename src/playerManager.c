@@ -22,14 +22,11 @@ Player *checkPlayer(int num) {
 	return 0;
 }
 
-Player *addPlayer(Player *p) {
-	Player *already = findList(&(PM->playerList), p, cmpPlayer);
-	if (already) {
-		//printf("we already have a player %i\n", already->num);
-		return already;
-	} 
+Player *addPlayer(void *character) {
+	Player *p = makePlayer(character, PM->curPlayers);
 	addToList(&(PM->playerList), p);
-	return 0;
+	PM->curPlayers++;
+	return p;
 }
 
 void removePlayer(Player *p) {
